@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model About {
+  id          Int    @id @default(autoincrement())
+  description String @map("about_us_description")
+  imageUrl    String @map("about_us_image_path")
+
+  @@map("about")
+}
+
+model EventType {
+  id   Int    @id @default(autoincrement())
+  name String @map("event_type_name")
+
+  @@map("event_types")
+}
+
+model FAQ {
+  id       Int    @id @default(autoincrement())
+  question String
+  answer   String
+
+  @@map("faqs")
+}
+
+model PricePackage {
+  id          Int                   @id @default(autoincrement())
+  name        String                @map("package_name")
+  description String                @map("package_description")
+  price       Decimal               @map("package_price")
+  features    PricePackageFeature[]
+
+  @@map("price_packages")
+}
+
+model PricePackageFeature {
+  id              Int          @id @default(autoincrement())
+  name            String       @map("feature_name")
+  description     String       @map("feature_description")
+  pricePackageId  Int          @map("price_package_id")
+  pricePackage    PricePackage @relation(fields: [pricePackageId], references: [id])
+
+  @@map("price_package_features")
+}
+
+model ServiceSummary {
+  id          Int    @id @default(autoincrement())
+  name        String @map("service_name")
+  description String @map("service_description")
+  imageUrl    String @map("service_image_path")
+  pageId      Int    @map("page_id")
+  urlSlug     String @map("url_slug")
+
+  @@map("service_summaries")
+}
+
+model Counter {
+  id       Int     @id @default(autoincrement())
+  name     String  @map("counter_name")
+  value    Int     @map("counter_value")
+  showPlus Boolean @map("show_plus")
+
+  @@map("counters")
+}
+
+model SongRequest {
+  id          Int      @id @default(autoincrement())
+  title       String
+  artistNames String   @map("artist_names")
+  url         String
+  imageUrl    String   @map("image_url")
+  requestDate DateTime @default(now()) @map("request_date")
+  isArchived  Boolean  @default(false) @map("is_archived")
+
+  @@map("song_requests")
+}
+
+model ContactFormSubmission {
+  id               Int      @id @default(autoincrement())
+  firstName        String   @map("first_name")
+  lastName         String   @map("last_name")
+  email            String
+  phoneNumber      String   @map("phone_number")
+  eventTypeId      Int      @map("event_type_id")
+  dateOfEvent      DateTime @map("date_of_event")
+  venueLocation    String   @map("venue_location")
+  eventDescription String   @map("event_description")
+  submittedAt      DateTime @default(now()) @map("submitted_at")
+
+  @@map("contact_form_submissions")
+}
+
+model AppSettings {
+  id                     Int     @id @default(autoincrement())
+  acceptingSongRequests  Boolean @default(false) @map("accepting_song_requests")
+
+  @@map("app_settings")
+}
