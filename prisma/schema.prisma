@@ -106,3 +106,53 @@ model AppSettings {
 
   @@map("app_settings")
 }
+
+model ClientIntakeForm {
+  id                        Int      @id @default(autoincrement())
+  clientName                String   @map("client_name")
+  email                     String
+  phoneNumber               String   @map("phone_number")
+  eventDate                 DateTime @map("event_date")
+  eventType                 String   @map("event_type")
+  venueLocation             String   @map("venue_location")
+  guestCount                Int      @map("guest_count")
+  eventDuration             String   @map("event_duration")
+  eventStartTime            String   @map("event_start_time")
+  eventEndTime              String   @map("event_end_time")
+  
+  // Music preferences
+  musicGenres               String[] @map("music_genres")
+  musicEra                  String   @map("music_era")
+  volumePreference          String   @map("volume_preference")
+  
+  // Must play list
+  mustPlaySongs             String   @map("must_play_songs") // JSON string
+  mustPlaySpotifyUrl        String?  @map("must_play_spotify_url")
+  mustPlayAppleMusicUrl     String?  @map("must_play_apple_music_url")
+  mustPlayOtherUrl          String?  @map("must_play_other_url")
+  
+  // Do not play list
+  doNotPlaySongs            String   @map("do_not_play_songs") // JSON string
+  doNotPlaySpotifyUrl       String?  @map("do_not_play_spotify_url")
+  doNotPlayAppleMusicUrl    String?  @map("do_not_play_apple_music_url")
+  doNotPlayOtherUrl         String?  @map("do_not_play_other_url")
+  
+  // Special requests
+  specialAnnouncements      String?  @map("special_announcements")
+  firstDanceSong            String?  @map("first_dance_song")
+  lastDanceSong             String?  @map("last_dance_song")
+  ceremonySongs             String?  @map("ceremony_songs") // JSON string for weddings
+  
+  // Equipment and setup
+  equipmentRequests         String?  @map("equipment_requests")
+  setupRequirements         String?  @map("setup_requirements")
+  
+  // Additional info
+  specialRequests           String?  @map("special_requests")
+  
+  // Timestamps
+  submittedAt               DateTime @default(now()) @map("submitted_at")
+  updatedAt                 DateTime @updatedAt @map("updated_at")
+
+  @@map("client_intake_forms")
+}

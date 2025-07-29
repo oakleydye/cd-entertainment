@@ -14,7 +14,8 @@ import {
   Phone, 
   Calendar, 
   MapPin, 
-  User, 
+  User,
+  Users,
   Clock,
   CheckCircle,
   XCircle,
@@ -62,14 +63,52 @@ interface SongRequest {
   isArchived: boolean;
 }
 
+interface ClientIntakeForm {
+  id: number;
+  clientName: string;
+  email: string;
+  phoneNumber: string;
+  eventDate: string;
+  eventType: string;
+  venueLocation: string;
+  guestCount: number;
+  eventDuration: string;
+  eventStartTime: string;
+  eventEndTime: string;
+  musicGenres: string[];
+  musicEra: string;
+  volumePreference: string;
+  mustPlaySongs: string;
+  mustPlaySpotifyUrl?: string;
+  mustPlayAppleMusicUrl?: string;
+  mustPlayOtherUrl?: string;
+  doNotPlaySongs: string;
+  doNotPlaySpotifyUrl?: string;
+  doNotPlayAppleMusicUrl?: string;
+  doNotPlayOtherUrl?: string;
+  specialAnnouncements?: string;
+  firstDanceSong?: string;
+  lastDanceSong?: string;
+  ceremonySongs?: string;
+  equipmentRequests?: string;
+  setupRequirements?: string;
+  specialRequests?: string;
+  dietaryRestrictions?: string;
+  accessibilityNeeds?: string;
+  submittedAt: string;
+  updatedAt: string;
+}
+
 export default function AdminDashboard() {
   const { user, isLoading, loginWithRedirect, logout } = useAuth();
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
+  const [intakeForms, setIntakeForms] = useState<ClientIntakeForm[]>([]);
   const [settings, setSettings] = useState<AppSettings>({ id: 1, acceptingSongRequests: false });
   const [eventTypes, setEventTypes] = useState<EventType[]>([]);
   const [songRequests, setSongRequests] = useState<SongRequest[]>([]);
   const [selectedSubmission, setSelectedSubmission] = useState<ContactSubmission | null>(null);
-  const [activeTab, setActiveTab] = useState<'contacts' | 'songs' | 'settings'>('contacts');
+  const [selectedIntakeForm, setSelectedIntakeForm] = useState<ClientIntakeForm | null>(null);
+  const [activeTab, setActiveTab] = useState<'contacts' | 'intake' | 'songs' | 'settings'>('contacts');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -86,6 +125,13 @@ export default function AdminDashboard() {
       if (submissionsResponse.ok) {
         const submissionsData = await submissionsResponse.json();
         setSubmissions(submissionsData);
+      }
+
+      // Load intake forms
+      const intakeResponse = await fetch('/api/intake');
+      if (intakeResponse.ok) {
+        const intakeData = await intakeResponse.json();
+        setIntakeForms(intakeData);
       }
 
       // Load app settings
@@ -152,6 +198,23 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       toast.error('Failed to delete submission');
+    }
+  };
+
+  const deleteIntakeForm = async (id: number) => {
+    try {
+      const response = await fetch(`/api/intake/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setIntakeForms(prev => prev.filter(f => f.id !== id));
+        toast.success('Intake form deleted successfully');
+      } else {
+        throw new Error('Failed to delete intake form');
+      }
+    } catch (error) {
+      toast.error('Failed to delete intake form');
     }
   };
 
@@ -295,6 +358,16 @@ export default function AdminDashboard() {
               }`}
             >
               Contact Submissions ({submissions.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('intake')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'intake'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Client Intake Forms ({intakeForms.length})
             </button>
             <button
               onClick={() => setActiveTab('songs')}
@@ -457,6 +530,154 @@ export default function AdminDashboard() {
           </div>
         )}
 
+        {activeTab === 'intake' && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Intake Stats */}
+            <div className="lg:col-span-1">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Settings className="h-5 w-5" />
+                    Intake Form Stats
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Total Forms:</span>
+                      <span className="font-medium">{intakeForms.length}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>This Month:</span>
+                      <span className="font-medium">
+                        {intakeForms.filter(f => 
+                          new Date(f.submittedAt).getMonth() === new Date().getMonth()
+                        ).length}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>This Week:</span>
+                      <span className="font-medium">
+                        {intakeForms.filter(f => {
+                          const submittedDate = new Date(f.submittedAt);
+                          const weekAgo = new Date();
+                          weekAgo.setDate(weekAgo.getDate() - 7);
+                          return submittedDate >= weekAgo;
+                        }).length}
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Intake Forms */}
+            <div className="lg:col-span-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Settings className="h-5 w-5" />
+                    Client Intake Forms
+                  </CardTitle>
+                  <CardDescription>
+                    Detailed client preferences and requirements
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {intakeForms.length === 0 ? (
+                    <div className="text-center py-8">
+                      <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500">No intake forms submitted yet</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {intakeForms.slice(0, 10).map((form) => (
+                        <motion.div
+                          key={form.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-2">
+                                <h3 className="font-semibold text-lg">
+                                  {form.clientName}
+                                </h3>
+                                <Badge variant="secondary">
+                                  {form.eventType}
+                                </Badge>
+                              </div>
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600 mb-3">
+                                <div className="flex items-center gap-2">
+                                  <Mail className="h-4 w-4" />
+                                  {form.email}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Phone className="h-4 w-4" />
+                                  {form.phoneNumber}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Calendar className="h-4 w-4" />
+                                  {formatDate(form.eventDate)}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <MapPin className="h-4 w-4" />
+                                  {form.venueLocation}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Users className="h-4 w-4" />
+                                  {form.guestCount} guests
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Clock className="h-4 w-4" />
+                                  {form.eventStartTime} - {form.eventEndTime}
+                                </div>
+                              </div>
+                              
+                              <div className="mb-2">
+                                <p className="text-sm text-gray-700">
+                                  <strong>Music Genres:</strong> {form.musicGenres.join(', ')}
+                                </p>
+                                <p className="text-sm text-gray-700">
+                                  <strong>Era:</strong> {form.musicEra} | <strong>Volume:</strong> {form.volumePreference}
+                                </p>
+                              </div>
+                              
+                              <div className="flex items-center gap-2 text-xs text-gray-500">
+                                <Clock className="h-3 w-3" />
+                                Submitted {formatDateTime(form.submittedAt)}
+                              </div>
+                            </div>
+                            
+                            <div className="flex gap-2 ml-4">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setSelectedIntakeForm(form)}
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => deleteIntakeForm(form.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'songs' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Song Request Stats */}
@@ -601,14 +822,18 @@ export default function AdminDashboard() {
                 
                 <div className="space-y-2">
                   <Label>Statistics Overview</Label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <div className="text-2xl font-bold">{submissions.length}</div>
-                      <div className="text-sm text-gray-600">Total Contact Submissions</div>
+                      <div className="text-sm text-gray-600">Contact Submissions</div>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="text-2xl font-bold">{intakeForms.length}</div>
+                      <div className="text-sm text-gray-600">Intake Forms</div>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <div className="text-2xl font-bold">{songRequests.length}</div>
-                      <div className="text-sm text-gray-600">Total Song Requests</div>
+                      <div className="text-sm text-gray-600">Song Requests</div>
                     </div>
                   </div>
                 </div>
@@ -692,6 +917,286 @@ export default function AdminDashboard() {
                 </Button>
                 <Button
                   onClick={() => window.open(`tel:${selectedSubmission.phoneNumber}`)}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  <Phone className="h-4 w-4 mr-2" />
+                  Call
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Intake Form Detail Modal */}
+      {selectedIntakeForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-4xl max-h-[80vh] overflow-auto">
+            <CardHeader>
+              <CardTitle>Client Intake Form Details</CardTitle>
+              <Button
+                onClick={() => setSelectedIntakeForm(null)}
+                className="absolute top-4 right-4"
+                variant="ghost"
+                size="sm"
+              >
+                ×
+              </Button>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Basic Information */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Event Information</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Client Name</Label>
+                    <p className="font-medium">{selectedIntakeForm.clientName}</p>
+                  </div>
+                  <div>
+                    <Label>Event Type</Label>
+                    <p className="font-medium">{selectedIntakeForm.eventType}</p>
+                  </div>
+                  <div>
+                    <Label>Email</Label>
+                    <p className="font-medium">{selectedIntakeForm.email}</p>
+                  </div>
+                  <div>
+                    <Label>Phone</Label>
+                    <p className="font-medium">{selectedIntakeForm.phoneNumber}</p>
+                  </div>
+                  <div>
+                    <Label>Event Date</Label>
+                    <p className="font-medium">{formatDate(selectedIntakeForm.eventDate)}</p>
+                  </div>
+                  <div>
+                    <Label>Guest Count</Label>
+                    <p className="font-medium">{selectedIntakeForm.guestCount}</p>
+                  </div>
+                  <div>
+                    <Label>Duration</Label>
+                    <p className="font-medium">{selectedIntakeForm.eventDuration}</p>
+                  </div>
+                  <div>
+                    <Label>Time</Label>
+                    <p className="font-medium">{selectedIntakeForm.eventStartTime} - {selectedIntakeForm.eventEndTime}</p>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <Label>Venue Location</Label>
+                  <p className="font-medium">{selectedIntakeForm.venueLocation}</p>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Music Preferences */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Music Preferences</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Music Era</Label>
+                    <p className="font-medium">{selectedIntakeForm.musicEra}</p>
+                  </div>
+                  <div>
+                    <Label>Volume Preference</Label>
+                    <p className="font-medium">{selectedIntakeForm.volumePreference}</p>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <Label>Preferred Genres</Label>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {selectedIntakeForm.musicGenres.map(genre => (
+                      <Badge key={genre} variant="outline">{genre}</Badge>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Must Play List */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Must Play List</h3>
+                {selectedIntakeForm.mustPlaySongs && (
+                  <div className="mb-4">
+                    <Label>Songs</Label>
+                    <div className="bg-gray-50 p-3 rounded mt-1">
+                      <pre className="whitespace-pre-wrap text-sm">{selectedIntakeForm.mustPlaySongs}</pre>
+                    </div>
+                  </div>
+                )}
+                <div className="grid grid-cols-1 gap-3">
+                  {selectedIntakeForm.mustPlaySpotifyUrl && (
+                    <div>
+                      <Label>Spotify Playlist</Label>
+                      <p className="font-medium">
+                        <a href={selectedIntakeForm.mustPlaySpotifyUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          {selectedIntakeForm.mustPlaySpotifyUrl}
+                        </a>
+                      </p>
+                    </div>
+                  )}
+                  {selectedIntakeForm.mustPlayAppleMusicUrl && (
+                    <div>
+                      <Label>Apple Music Playlist</Label>
+                      <p className="font-medium">
+                        <a href={selectedIntakeForm.mustPlayAppleMusicUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          {selectedIntakeForm.mustPlayAppleMusicUrl}
+                        </a>
+                      </p>
+                    </div>
+                  )}
+                  {selectedIntakeForm.mustPlayOtherUrl && (
+                    <div>
+                      <Label>Other Playlist</Label>
+                      <p className="font-medium">
+                        <a href={selectedIntakeForm.mustPlayOtherUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          {selectedIntakeForm.mustPlayOtherUrl}
+                        </a>
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Do Not Play List */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Do Not Play List</h3>
+                {selectedIntakeForm.doNotPlaySongs && (
+                  <div className="mb-4">
+                    <Label>Songs/Artists to Avoid</Label>
+                    <div className="bg-gray-50 p-3 rounded mt-1">
+                      <pre className="whitespace-pre-wrap text-sm">{selectedIntakeForm.doNotPlaySongs}</pre>
+                    </div>
+                  </div>
+                )}
+                <div className="grid grid-cols-1 gap-3">
+                  {selectedIntakeForm.doNotPlaySpotifyUrl && (
+                    <div>
+                      <Label>Excluded Spotify Playlist</Label>
+                      <p className="font-medium">
+                        <a href={selectedIntakeForm.doNotPlaySpotifyUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          {selectedIntakeForm.doNotPlaySpotifyUrl}
+                        </a>
+                      </p>
+                    </div>
+                  )}
+                  {selectedIntakeForm.doNotPlayAppleMusicUrl && (
+                    <div>
+                      <Label>Excluded Apple Music Playlist</Label>
+                      <p className="font-medium">
+                        <a href={selectedIntakeForm.doNotPlayAppleMusicUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          {selectedIntakeForm.doNotPlayAppleMusicUrl}
+                        </a>
+                      </p>
+                    </div>
+                  )}
+                  {selectedIntakeForm.doNotPlayOtherUrl && (
+                    <div>
+                      <Label>Other Excluded Playlist</Label>
+                      <p className="font-medium">
+                        <a href={selectedIntakeForm.doNotPlayOtherUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          {selectedIntakeForm.doNotPlayOtherUrl}
+                        </a>
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Special Requests */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Special Requests</h3>
+                <div className="grid grid-cols-1 gap-4">
+                  {selectedIntakeForm.firstDanceSong && (
+                    <div>
+                      <Label>First Dance Song</Label>
+                      <p className="font-medium">{selectedIntakeForm.firstDanceSong}</p>
+                    </div>
+                  )}
+                  {selectedIntakeForm.lastDanceSong && (
+                    <div>
+                      <Label>Last Dance Song</Label>
+                      <p className="font-medium">{selectedIntakeForm.lastDanceSong}</p>
+                    </div>
+                  )}
+                  {selectedIntakeForm.ceremonySongs && (
+                    <div>
+                      <Label>Ceremony Songs</Label>
+                      <div className="bg-gray-50 p-3 rounded mt-1">
+                        <pre className="whitespace-pre-wrap text-sm">{selectedIntakeForm.ceremonySongs}</pre>
+                      </div>
+                    </div>
+                  )}
+                  {selectedIntakeForm.specialAnnouncements && (
+                    <div>
+                      <Label>Special Announcements</Label>
+                      <div className="bg-gray-50 p-3 rounded mt-1">
+                        <pre className="whitespace-pre-wrap text-sm">{selectedIntakeForm.specialAnnouncements}</pre>
+                      </div>
+                    </div>
+                  )}
+                  {selectedIntakeForm.equipmentRequests && (
+                    <div>
+                      <Label>Equipment Requests</Label>
+                      <div className="bg-gray-50 p-3 rounded mt-1">
+                        <pre className="whitespace-pre-wrap text-sm">{selectedIntakeForm.equipmentRequests}</pre>
+                      </div>
+                    </div>
+                  )}
+                  {selectedIntakeForm.setupRequirements && (
+                    <div>
+                      <Label>Setup Requirements</Label>
+                      <div className="bg-gray-50 p-3 rounded mt-1">
+                        <pre className="whitespace-pre-wrap text-sm">{selectedIntakeForm.setupRequirements}</pre>
+                      </div>
+                    </div>
+                  )}
+                  {selectedIntakeForm.specialRequests && (
+                    <div>
+                      <Label>Additional Special Requests</Label>
+                      <div className="bg-gray-50 p-3 rounded mt-1">
+                        <pre className="whitespace-pre-wrap text-sm">{selectedIntakeForm.specialRequests}</pre>
+                      </div>
+                    </div>
+                  )}
+                  {selectedIntakeForm.dietaryRestrictions && (
+                    <div>
+                      <Label>Dietary Restrictions</Label>
+                      <p className="font-medium">{selectedIntakeForm.dietaryRestrictions}</p>
+                    </div>
+                  )}
+                  {selectedIntakeForm.accessibilityNeeds && (
+                    <div>
+                      <Label>Accessibility Needs</Label>
+                      <p className="font-medium">{selectedIntakeForm.accessibilityNeeds}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <Label>Submitted At</Label>
+                <p className="font-medium">{formatDateTime(selectedIntakeForm.submittedAt)}</p>
+              </div>
+              
+              <div className="flex gap-2 pt-4">
+                <Button
+                  onClick={() => window.open(`mailto:${selectedIntakeForm.email}`)}
+                  className="flex-1"
+                >
+                  <Mail className="h-4 w-4 mr-2" />
+                  Email Client
+                </Button>
+                <Button
+                  onClick={() => window.open(`tel:${selectedIntakeForm.phoneNumber}`)}
                   variant="outline"
                   className="flex-1"
                 >

@@ -87,3 +87,51 @@ export interface HitResult {
     id: number
   }
 }
+
+export interface ClientIntakeForm {
+  id?: number
+  clientName: string
+  email: string
+  phoneNumber: string
+  eventDate: Date
+  eventType: string
+  venueLocation: string
+  guestCount: number
+  eventDuration: string
+  eventStartTime: string
+  eventEndTime: string
+  
+  // Music preferences
+  musicGenres: string[]
+  musicEra: string
+  volumePreference: string
+  
+  // Must play list
+  mustPlaySongs: string
+  mustPlaySpotifyUrl?: string
+  mustPlayAppleMusicUrl?: string
+  mustPlayOtherUrl?: string
+  
+  // Do not play list
+  doNotPlaySongs: string
+  doNotPlaySpotifyUrl?: string
+  doNotPlayAppleMusicUrl?: string
+  doNotPlayOtherUrl?: string
+  
+  // Special requests
+  specialAnnouncements?: string
+  firstDanceSong?: string
+  lastDanceSong?: string
+  ceremonySongs?: string
+  
+  // Equipment and setup
+  equipmentRequests?: string
+  setupRequirements?: string
+  
+  // Additional info
+  specialRequests?: string
+  
+  // Timestamps
+  submittedAt?: Date
+  updatedAt?: Date
+}
