@@ -113,14 +113,14 @@ const MenuBar: React.FC = () => {
                   </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
-              <AuthButton />
+              {/* <AuthButton /> */}
             </div>
           )}
 
           {/* Mobile menu button */}
           {isMobile && (
             <div className="flex items-center space-x-2">
-              <AuthButton />
+              {/* <AuthButton /> */}
               <Button
                 variant="ghost"
                 size="icon"
