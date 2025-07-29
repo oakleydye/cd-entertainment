@@ -3,12 +3,11 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
+import { Label } from '@/components/ui/label';
 import { 
   Settings, 
   Mail, 
@@ -23,10 +22,12 @@ import {
   Trash2,
   Eye,
   Music,
-  Archive
+  Archive,
+  LogOut
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { useAuth } from '@/components/auth/auth0-provider';
 
 interface ContactSubmission {
   id: number;
@@ -62,9 +63,7 @@ interface SongRequest {
 }
 
 export default function AdminDashboard() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
-  const [authError, setAuthError] = useState('');
+  const { user, isLoading, loginWithRedirect, logout } = useAuth();
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
   const [settings, setSettings] = useState<AppSettings>({ id: 1, acceptingSongRequests: false });
   const [eventTypes, setEventTypes] = useState<EventType[]>([]);
@@ -74,34 +73,10 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if already authenticated in session
-    const authenticated = sessionStorage.getItem('admin_authenticated');
-    if (authenticated === 'true') {
-      setIsAuthenticated(true);
+    if (user) {
       loadDashboardData();
-    } else {
-      setLoading(false);
     }
-  }, []);
-
-  const handleLogin = () => {
-    // Simple password authentication - in production, use proper auth
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123';
-    if (password === adminPassword) {
-      setIsAuthenticated(true);
-      sessionStorage.setItem('admin_authenticated', 'true');
-      setAuthError('');
-      loadDashboardData();
-    } else {
-      setAuthError('Invalid password');
-    }
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    sessionStorage.removeItem('admin_authenticated');
-    setPassword('');
-  };
+  }, [user]);
 
   const loadDashboardData = async () => {
     setLoading(true);
@@ -243,36 +218,31 @@ export default function AdminDashboard() {
     });
   };
 
-  if (!isAuthenticated) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-lg">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-center">Admin Login</CardTitle>
+            <CardTitle className="text-center">Admin Login Required</CardTitle>
             <CardDescription className="text-center">
-              Enter your password to access the admin dashboard
+              Please sign in to access the admin dashboard
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div>
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                  placeholder="Enter admin password"
-                />
-              </div>
-              {authError && (
-                <Alert variant="destructive">
-                  <AlertDescription>{authError}</AlertDescription>
-                </Alert>
-              )}
-              <Button onClick={handleLogin} className="w-full">
-                Login
+              <Button onClick={loginWithRedirect} className="w-full">
+                Sign In
               </Button>
             </div>
           </CardContent>
@@ -298,9 +268,15 @@ export default function AdminDashboard() {
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-            <Button onClick={handleLogout} variant="outline">
-              Logout
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+              {user && (
+                <p className="text-sm text-gray-600">Welcome, {user.name || user.email}</p>
+              )}
+            </div>
+            <Button onClick={logout} variant="outline">
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
             </Button>
           </div>
         </div>

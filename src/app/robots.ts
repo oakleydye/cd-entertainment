@@ -8,7 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
       disallow: [
-        '/request-dashboard/',
         '/api/',
         '/_next/',
         '/admin/',

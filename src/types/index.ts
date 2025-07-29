@@ -69,14 +69,9 @@ export interface ContactFormSubmission {
 
 export interface GeniusSearchResponse {
   response: {
-    hits: {
-      result: {
-        title: string
-        artist_names: string
-        url: string
-        song_art_image_thumbnail_url: string
-      }
-    }[]
+    hits: Array<{
+      result: HitResult
+    }>
   }
 }
 
@@ -85,4 +80,10 @@ export interface HitResult {
   artist_names: string
   url: string
   song_art_image_thumbnail_url: string
+  id: number
+  full_title: string
+  primary_artist: {
+    name: string
+    id: number
+  }
 }

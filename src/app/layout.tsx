@@ -4,8 +4,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { generateSEOMetadata } from "@/lib/seo";
 import { Analytics } from "@/components/analytics/analytics";
-import MenuBar from "@/components/common/menu-bar";
-import Footer from "@/components/common/footer";
+import ConditionalLayout from "@/components/layout/conditional-layout";
+import { Auth0Provider } from "@/components/auth/auth0-provider";
 
 const bungee = Bungee({
   subsets: ["latin"],
@@ -87,17 +87,15 @@ export default function RootLayout({
         {/* Sitemap */}
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
       </head>
-      <body
+            <body
         className={`${roboto.variable} ${bungee.variable} antialiased overflow-x-hidden`}
       >
         <Analytics />
-        <div className="w-full overflow-x-hidden">
-          <MenuBar />
-          <main>
+        <Auth0Provider>
+          <ConditionalLayout>
             {children}
-          </main>
-          <Footer />
-        </div>
+          </ConditionalLayout>
+        </Auth0Provider>
         <Toaster />
       </body>
     </html>
