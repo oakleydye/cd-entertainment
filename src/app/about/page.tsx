@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ContactSection from '@/components/homepage/contact-section';
 import PageLayout from '@/components/layout/page-layout';
 import { StructuredData } from '@/components/seo/structured-data';
-import { serviceStructuredData } from '@/lib/seo';
 import { useEffect } from 'react';
 
 export default function AboutPage() {
@@ -39,7 +38,7 @@ export default function AboutPage() {
       
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-primary to-primary/80 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4 text-center mt-20">
           <motion.h1 
             className="text-4xl md:text-6xl font-bold mb-6"
             initial={{ opacity: 0, y: 20 }}
@@ -72,7 +71,7 @@ export default function AboutPage() {
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Story</h2>
               <p className="text-lg leading-relaxed text-muted-foreground">
                 For over a decade, CD Entertainment has been bringing exceptional music and entertainment 
-                to events across the metro area. What started as a passion for music has evolved into 
+                to events across northern Utah. What started as a passion for music has evolved into 
                 one of the region's most trusted entertainment companies.
               </p>
             </motion.div>
@@ -210,18 +209,18 @@ export default function AboutPage() {
             >
               <div className="relative w-48 h-48 mx-auto mb-6">
                 <Image
-                  src="/images/hero_image.jpg"
-                  alt="CD - Professional DJ"
+                  src="/images/oakley.jpg"
+                  alt="Oakley - DJ"
                   fill
                   className="rounded-full object-cover"
                 />
               </div>
-              <h3 className="text-2xl font-bold mb-2">CD - Lead DJ & Founder</h3>
+              <h3 className="text-2xl font-bold mb-2">Oakley - DJ & Founder</h3>
               <p className="text-muted-foreground mb-4">Professional DJ & Event Specialist</p>
               <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                With over a decade of experience in the entertainment industry, CD has perfected 
+                With over a decade of experience in the entertainment industry, Oakley has perfected 
                 the art of reading crowds and creating unforgettable musical experiences. From 
-                intimate wedding ceremonies to high-energy corporate events, CD's expertise ensures 
+                intimate wedding ceremonies to high-energy corporate events, Oakley's expertise ensures 
                 your celebration will be everything you dreamed of and more.
               </p>
             </motion.div>

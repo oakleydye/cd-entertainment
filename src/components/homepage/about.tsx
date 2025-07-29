@@ -38,7 +38,7 @@ const About: React.FC = () => {
             </h2>
             <div className="space-y-4 text-lg text-gray-600">
               <p>
-                With over 15 years of experience in the entertainment industry, 
+                With over 10 years of experience in the entertainment industry, 
                 CD Entertainment has been the go-to choice for memorable events 
                 throughout the region. Our passion for music and commitment to 
                 excellence ensures your special day is nothing short of perfect.
@@ -59,11 +59,11 @@ const About: React.FC = () => {
 
             <div className="mt-8 grid grid-cols-3 gap-8 text-center">
               <div>
-                <div className="text-3xl font-bold text-primary mb-2">500+</div>
+                <div className="text-3xl font-bold text-primary mb-2">100+</div>
                 <div className="text-sm text-gray-600">Events Completed</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-primary mb-2">15+</div>
+                <div className="text-3xl font-bold text-primary mb-2">10+</div>
                 <div className="text-sm text-gray-600">Years Experience</div>
               </div>
               <div>

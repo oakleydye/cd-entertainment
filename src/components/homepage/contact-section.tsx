@@ -252,21 +252,21 @@ const ContactSection: React.FC = () => {
                   <Phone className="w-5 h-5 text-primary" />
                   <div>
                     <p className="font-semibold">Phone</p>
-                    <p className="text-gray-600">(555) 123-4567</p>
+                    <p className="text-gray-600">(435) 557-1427</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-primary" />
                   <div>
                     <p className="font-semibold">Email</p>
-                    <p className="text-gray-600">info@cdentertainment.com</p>
+                    <p className="text-gray-600">oakley@cdentertainment.co</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <MapPin className="w-5 h-5 text-primary" />
                   <div>
                     <p className="font-semibold">Service Area</p>
-                    <p className="text-gray-600">Greater Metro Area & Surrounding Regions</p>
+                    <p className="text-gray-600">Northern Utah, Cache County & Surrounding Areas</p>
                   </div>
                 </div>
               </CardContent>

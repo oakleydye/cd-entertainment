@@ -12,7 +12,7 @@ export default function PartiesPage() {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-primary to-primary/80 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4 text-center mt-20">
           <motion.h1 
             className="text-4xl md:text-6xl font-bold mb-6"
             initial={{ opacity: 0, y: 20 }}
@@ -59,7 +59,7 @@ export default function PartiesPage() {
               className="relative h-96 lg:h-full min-h-[400px] rounded-lg overflow-hidden shadow-lg"
             >
               <Image
-                src="/images/parties.jpg"
+                src="/images/party.jpg"
                 alt="Private Party"
                 fill
                 className="object-cover"

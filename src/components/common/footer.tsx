@@ -82,15 +82,15 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-slate-300">
                 <Phone className="h-5 w-5 text-blue-400" />
-                <span>(555) 123-4567</span>
+                <span>(435) 557-1427</span>
               </div>
               <div className="flex items-center gap-3 text-slate-300">
                 <Mail className="h-5 w-5 text-blue-400" />
-                <span>info@cd-entertainment.com</span>
+                <span>oakley@cdentertainment.co</span>
               </div>
               <div className="flex items-center gap-3 text-slate-300">
                 <MapPin className="h-5 w-5 text-blue-400" />
-                <span>City, State 12345</span>
+                <span>Hyrum, UT 84319</span>
               </div>
               <div className="flex items-center gap-3 text-slate-300">
                 <Calendar className="h-5 w-5 text-blue-400" />
@@ -190,15 +190,16 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-slate-400 text-sm">
-            © {currentYear} CD Entertainment. All rights reserved.
+          <div className="flex flex-col flex-wrap items-left gap-2 text-slate-400 text-sm">
+            <span>© {currentYear} CD Entertainment. All rights reserved.</span>
+            <span>Website powered by <Link className='text-slate-200' href="https://www.oakleydye.com">Oakley Dye Software & Design</Link></span>
           </div>
-          <div className="flex flex-wrap items-center gap-6 text-sm">
+          <div className="flex flex-col flex-wrap items-end gap-2 text-sm">
             <span className="text-slate-400">
-              Licensed & Insured Professional DJ Services
+              Professional DJ Services
             </span>
             <span className="text-slate-400">
-              Serving the Greater Metro Area
+              Serving Northern Utah, Cache County & Surrounding Areas
             </span>
           </div>
         </div>

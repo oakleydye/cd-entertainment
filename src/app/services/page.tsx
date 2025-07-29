@@ -12,7 +12,7 @@ const services = [
     id: 1,
     title: 'Weddings',
     description: 'Create the perfect soundtrack for your special day with customized playlists and professional equipment.',
-    image: '/images/weddings.jpg',
+    image: '/images/wedding.jpg',
     href: '/services/weddings',
     icon: <Users className="w-8 h-8" />,
     features: ['Custom Playlists', 'Ceremony Music', 'Reception Entertainment', 'MC Services']
@@ -30,7 +30,7 @@ const services = [
     id: 3,
     title: 'Private Parties',
     description: 'Celebrate birthdays, anniversaries, and special occasions with personalized entertainment.',
-    image: '/images/parties.jpg',
+    image: '/images/party.jpg',
     href: '/services/parties',
     icon: <Users className="w-8 h-8" />,
     features: ['Personalized Playlists', 'Interactive DJ', 'Special Requests', 'Party Games']
@@ -69,7 +69,7 @@ export default function ServicesPage() {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-primary to-primary/80 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4 text-center mt-20">
           <motion.h1 
             className="text-4xl md:text-6xl font-bold mb-6"
             initial={{ opacity: 0, y: 20 }}

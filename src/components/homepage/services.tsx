@@ -18,7 +18,7 @@ const ServicesSection: React.FC = () => {
     {
       title: 'Weddings',
       description: 'Make your special day unforgettable with our comprehensive wedding DJ services.',
-      image: '/images/dance_party.jpg',
+      image: '/images/wedding.jpg',
       href: '/services/weddings',
     },
     {
@@ -30,7 +30,7 @@ const ServicesSection: React.FC = () => {
     {
       title: 'Parties & Celebrations',
       description: 'Birthday parties, anniversaries, and special celebrations that keep guests dancing.',
-      image: '/images/dance_party.jpg',
+      image: '/images/party.jpg',
       href: '/services/parties',
     },
     {
@@ -42,7 +42,7 @@ const ServicesSection: React.FC = () => {
     {
       title: 'Live Sound',
       description: 'Professional sound reinforcement for live performances and speaking events.',
-      image: '/images/corporate.jpg',
+      image: '/images/live_sound.jpg',
       href: '/services/live-sound',
     },
     {

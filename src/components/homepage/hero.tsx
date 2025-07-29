@@ -21,7 +21,7 @@ const HeroSection: React.FC = () => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/hero_image2.jpg"
+          src="/images/hero_image.jpg"
           alt="DJ Equipment"
           fill
           className="object-cover"
@@ -38,11 +38,8 @@ const HeroSection: React.FC = () => {
           transition={{ duration: 0.8 }}
         >
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 font-bungee">
-            CD ENTERTAINMENT
+            ELEVATE YOUR EVENT WITH CD ENTERTAINMENT
           </h1>
-          <p className="text-xl sm:text-2xl md:text-3xl mb-8 font-light">
-            Professional DJ Services for Your Special Events
-          </p>
           <p className="text-lg sm:text-xl mb-10 max-w-2xl mx-auto opacity-90">
             From weddings to corporate events, we provide exceptional entertainment
             that keeps your guests dancing all night long.
@@ -60,7 +57,7 @@ const HeroSection: React.FC = () => {
               size={isMobile ? "default" : "lg"}
               variant="outline"
               onClick={() => scrollToSection('services')}
-              className="border-white text-white hover:bg-white hover:text-black px-8 py-3"
+              className="border-white text-primary hover:bg-white hover:text-black px-8 py-3"
             >
               Our Services
             </Button>

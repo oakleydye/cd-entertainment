@@ -65,7 +65,7 @@ export default function WeddingsPage() {
       <StructuredData data={weddingStructuredData} />
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-primary to-primary/80 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4 text-center mt-20">
           <motion.h1 
             className="text-4xl md:text-6xl font-bold mb-6"
             initial={{ opacity: 0, y: 20 }}
@@ -119,7 +119,7 @@ export default function WeddingsPage() {
               className="relative h-96 lg:h-full min-h-[400px] rounded-lg overflow-hidden shadow-lg"
             >
               <Image
-                src="/images/weddings.jpg"
+                src="/images/wedding.jpg"
                 alt="Wedding DJ Setup"
                 fill
                 className="object-cover"
@@ -182,7 +182,7 @@ export default function WeddingsPage() {
                 </div>
                 <div className="relative h-64 rounded-lg overflow-hidden shadow-lg">
                   <Image
-                    src="/images/wedding-planning.jpg"
+                    src="/images/wedding.jpg"
                     alt="Wedding Planning"
                     fill
                     className="object-cover"
@@ -198,7 +198,7 @@ export default function WeddingsPage() {
               >
                 <div className="relative h-64 rounded-lg overflow-hidden shadow-lg md:order-first">
                   <Image
-                    src="/images/wedding-reception.jpg"
+                    src="/images/wedding.jpg"
                     alt="Wedding Reception"
                     fill
                     className="object-cover"
