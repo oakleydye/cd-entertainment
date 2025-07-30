@@ -33,7 +33,7 @@ export function generateSEOMetadata({
   twitterCard = "summary_large_image",
   noIndex = false
 }: SEOProps = {}): Metadata {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://cd-entertainment.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.cdentertainment.co'
   const fullCanonicalUrl = canonicalUrl ? `${baseUrl}${canonicalUrl}` : baseUrl
   const fullOgImage = ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage}`
 
@@ -101,51 +101,48 @@ export const organizationStructuredData = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'CD Entertainment',
-  url: 'https://cd-entertainment.com',
-  logo: 'https://cd-entertainment.com/logo.png',
+  url: 'https://www.cdentertainment.co',
+  logo: 'https://www.cdentertainment.co/disk_logo.png',
   contactPoint: {
     '@type': 'ContactPoint',
-    telephone: '+1-555-123-4567',
+    telephone: '+1-435-557-1427',
     contactType: 'customer service',
     availableLanguage: 'English'
   },
   address: {
     '@type': 'PostalAddress',
-    streetAddress: '123 Main Street',
-    addressLocality: 'Your City',
-    addressRegion: 'Your State',
-    postalCode: '12345',
+    streetAddress: '572 S 690 E',
+    addressLocality: 'Hyrum',
+    addressRegion: 'Utah',
+    postalCode: '84319',
     addressCountry: 'US'
   },
   sameAs: [
-    'https://facebook.com/cd-entertainment',
-    'https://instagram.com/cd-entertainment',
-    'https://twitter.com/cd-entertainment',
-    'https://youtube.com/cd-entertainment'
+    'https://instagram.com/cdentertainment.co',
   ]
 }
 
 export const localBusinessStructuredData = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  '@id': 'https://cd-entertainment.com',
+  '@id': 'https://www.cdentertainment.co',
   name: 'CD Entertainment',
-  image: 'https://cd-entertainment.com/logo.png',
-  url: 'https://cd-entertainment.com',
-  telephone: '+1-555-123-4567',
+  image: 'https://www.cdentertainment.co/logo.png',
+  url: 'https://www.cdentertainment.co',
+  telephone: '+1-435-557-1427',
   priceRange: '$$',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: '123 Main Street',
-    addressLocality: 'Your City',
-    addressRegion: 'Your State',
-    postalCode: '12345',
+    streetAddress: '572 S 690 E',
+    addressLocality: 'Hyrum',
+    addressRegion: 'Utah',
+    postalCode: '84319',
     addressCountry: 'US'
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: 40.7128,
-    longitude: -74.0060
+    latitude: 41.6221468,
+    longitude: -111.837316
   },
   openingHoursSpecification: [
     {
@@ -183,14 +180,14 @@ export const serviceStructuredData = (serviceName: string, serviceDescription: s
   provider: {
     '@type': 'Organization',
     name: 'CD Entertainment',
-    url: 'https://cd-entertainment.com'
+    url: 'https://www.cdentertainment.co'
   },
   areaServed: {
     '@type': 'GeoCircle',
     geoMidpoint: {
       '@type': 'GeoCoordinates',
-      latitude: 40.7128,
-      longitude: -74.0060
+      latitude: 41.6221468,
+      longitude: -111.837316
     },
     geoRadius: '50'
   },
