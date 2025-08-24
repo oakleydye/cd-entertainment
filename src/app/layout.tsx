@@ -6,6 +6,7 @@ import { generateSEOMetadata } from "@/lib/seo";
 import { Analytics } from "@/components/analytics/analytics";
 import ConditionalLayout from "@/components/layout/conditional-layout";
 import { Auth0Provider } from "@/components/auth/auth0-provider";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/next"
 
 const bungee = Bungee({
   subsets: ["latin"],
@@ -90,6 +91,7 @@ export default function RootLayout({
             <body
         className={`${roboto.variable} ${bungee.variable} antialiased overflow-x-hidden`}
       >
+        <VercelAnalytics />
         <Analytics />
         <Auth0Provider>
           <ConditionalLayout>
